@@ -1,0 +1,21 @@
+<table class="w-full border mt-6">
+    <thead>
+      <tr class="bg-gray-300">
+        <th class="p-2">Sl No</th>
+        <th class="p-2">Property</th>
+        <th class="p-2">Price</th>
+        <th class="p-2">Date</th>
+        <th class="p-2">Status</th>
+      </tr>
+    </thead>
+  
+    <tbody>
+      <tr *ngFor="let p of purchases; let i = index">
+        <td class="border p-2">{{i+1}}</td>
+        <td class="border p-2">{{p.propertyName}}</td>
+        <td class="border p-2">{{p.price}}</td>
+        <td class="border p-2">{{p.date?.toDate() | date}}</td>
+        <td class="border p-2 text-green-600">{{p.status}}</td>
+      </tr>
+    </tbody>
+  </table>

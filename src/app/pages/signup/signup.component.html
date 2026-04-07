@@ -1,0 +1,77 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
+      <!-- LEFT IMAGE -->
+      <div class="hidden md:block">
+        <img src="assets/images/signupimage.png"
+             class="h-full w-full object-contain">
+      </div>
+      <!-- RIGHT FORM -->
+      <div class="p-8 flex flex-col justify-center relative">
+        <i class="fas fa-window-close text-[#6153CD] cursor-pointer absolute top-4 right-4"></i>
+        <h2 class="text-2xl font-bold text-[#6153CD] mb-6 text-center">
+          Create Account
+        </h2>
+  
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+  
+          <!-- Role -->
+          <div>
+            <label class="text-sm font-medium">Select Role</label>
+            <select formControlName="role"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#6153CD]">
+                    <option value="">Select</option>
+              <option value="buyer">Buyer</option>
+              <option value="seller">Seller</option>
+            </select>
+          </div>
+  
+          <!-- Email -->
+          <div>
+            <label>Email</label>
+            <input type="email" formControlName="email"
+                   class="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#6153CD]">
+  
+            <p *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.invalid"
+               class="text-red-500 text-sm">
+              Enter valid email
+            </p>
+          </div>
+  
+          <!-- Password -->
+          <div>
+            <label>Password</label>
+            <input type="password" formControlName="password"
+                   class="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#6153CD]">
+  
+            <p *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid"
+               class="text-red-500 text-sm">
+              Must contain 8 chars, uppercase, lowercase, number & special char
+            </p>
+          </div>
+  
+          <!-- Confirm Password -->
+          <div>
+            <label>Confirm Password</label>
+            <input type="password" formControlName="confirmPassword"
+                   class="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#6153CD]">
+  
+            <p *ngIf="signupForm.get('confirmPassword')?.touched && signupForm.get('confirmPassword')?.invalid"
+               class="text-red-500 text-sm">
+              Confirm password is required
+            </p>
+          </div>
+  
+          <!-- Submit -->
+          <button type="submit"
+                  [disabled]="signupForm.invalid"
+                  class="bg-[#6153CD] text-white py-2 rounded-lg mt-2 hover:bg-white hover:text-[#6153CD] hover:border hover:border-[#6153CD] transition disabled:opacity-50 cursor-pointer">
+            Sign Up
+          </button>
+  
+        </form>
+  <p class="text-sm mt-4">Already an User? <span class=" ml-1 text-[#6153CD] font-medium cursor-pointer" (click)="backToLogin()">Login</span></p>
+      </div>
+
+    </div>
+  
+  </div>

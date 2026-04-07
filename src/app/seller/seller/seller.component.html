@@ -1,0 +1,103 @@
+        
+<div [ngClass]="isDarkMode ?'bg-gray-900 text-white':'bg-white text-black'">
+<section class="bg-[#6153CD] text-white py-16 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Property Management</h1>
+    <button class="bg-[#6153CD] text-white font-bold border border-white py-2 rounded-lg mt-2 hover:bg-white hover:text-[#6153CD] hover:border hover:border-[#6153CD] transition disabled:opacity-50 px-2" (click)="showForm =!showForm"> Click Here to Add Property</button>
+  </section>
+
+<div *ngIf="showForm" class="p-6 rounded-xl mb-6" [ngClass]="isDarkMode?'bg-gray-800':'bg-gary-100'">
+    <form action=""[formGroup]="propertyForm" (ngSubmit)="onSubmit()" class="grid grid-cols-2 gap-4">
+        <div>
+            <label class="block mb-1 font-medium">Property Name</label>
+            <input type="text" placeholder="Property Name" formControlName="propertyName" class="w-full p-2 border rounded">
+        </div>
+        <div>
+            <label class="block mb-1 font-medium">Address</label>
+            <input type="text" placeholder="Address" formControlName="address" class="w-full p-2 border rounded">
+        </div>
+        <div>
+            <label class="block mb-1 font-medium">Price</label>
+            <input type="text" placeholder="Price" formControlName="price" class="w-full p-2 border rounded">
+        </div>
+       
+        <div>
+            <label class="block mb-1 font-medium">Photo URL</label>
+            <input type="file" (change)="onFileChange($event)" accept="image/*" class="w-full border p-2 rounded">
+            <img *ngIf="previewUrl" [src]="previewUrl" class="w-32 h-32 mt-3 rounded object-cover">
+        </div>
+        
+    
+        <div class="col-span-2">
+            <label class="block mb-1 font-medium">Facilities</label><br>
+            <label class="mr-4">
+                <input type="checkbox" (change)="onFacilityChange($event,'gym')" [value]="'gym'" [checked]="facilities.includes('gym')">Gym
+            </label>
+            <label class="mr-4">
+                <input type="checkbox" (change)="onFacilityChange($event,'pool')" [value]="'pool'" [checked]="facilities.includes('pool')">Pool
+            </label>
+            <label class="mr-4">
+                <input type="checkbox" (change)="onFacilityChange($event,'garden')" [value]="'garden'" [checked]="facilities.includes('garden')">Garden
+            </label>
+        </div>
+        <div class="col-span-2 flex justify-center">
+        <button type="submit" class="bg-[#6153CD] text-white py-2 rounded-lg mt-2 hover:bg-white hover:text-[#6153CD] hover:border hover:border-[#6153CD] transition disabled:opacity-50 text-center px-2">Submit</button>
+    </div>
+    </form>
+</div>
+<div class="p-6 rounded-xl shadow"[ngClass]="isDarkMode?'bg-gray-800 text-white':'bg-white text-black'">
+    <h2 class="text-xl font-semibold mb-4">Added Properties</h2>
+    <!-- <input type="text" placeholder="Search Property" [(ngModel)]="searchText" (input)="filterProperties()" class="border p-2 mb-3 w-full rounded"> -->
+   <app-filter [tableData]="allProperties" (filteredData)="properties=$event"></app-filter>
+    <table class="w-full border my-4">
+        <thead>
+            <tr class="bg-gray-400">
+                <th class="p-2">Sl No</th>
+                <th class="p-2">Name</th>
+                <th class="p-2">Address</th>
+                <th class="p-2">Price</th>
+                <th class="p-2">Facilities</th>
+                <th class="p-2">Photo</th>
+                <th class="p-2">Date</th>
+                <th class="p-2">Time</th>
+                <th class="p-2">Edit</th>
+                <th class="p-2">Delete</th>
+                <th class="p-2">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="properties.length>0; else noData">
+                <tr *ngFor="let p of properties; let i =index">
+                    <td class="p-2 border">{{i+1}}</td>
+                    <td class="p-2 border">{{p.propertyName}}</td>
+                    <td class="p-2 border">{{p.address}}</td>
+                    <td class="p-2 border">{{p.price}}</td>
+                    <td class="p-2 border">{{p.facilities?.join(',')}}</td>
+                    <td class="p-2 border">
+                        <img [src]="p.photo" width="80">
+                    </td>
+                    <td class="p-2 border">{{p.date}}</td>
+                    <td class="p-2 border">{{p.time}}</td>
+                    <td class="p-2 border">
+                        <div class="inline-block" [title]="p.status === 'approved' ?'Already Approved' :''">
+                        <button class="bg-green-300 px-2 py-2 rounded-lg" (click)="editButton(p)"[disabled]="p.status === 'approved'">Edit</button>
+                        </div>
+                    </td>
+                    <td class="p-2 border">
+                        <div class="inline-block" [title]="p.status === 'approved' ?'Already Approved' :''">
+                        <button class="bg-red-300 px-2 py-2 rounded-lg" (click)="deleteButton(p.id)" [disabled]="p.status === 'approved'">Delete</button>
+                    </div>
+                    </td>
+                    <td class="p-2 border">{{p.status}}</td>
+                </tr>
+            </ng-container>
+            <ng-template #noData>
+                <tr>
+                    <td colspan="5" class="text-center border p-4">No Properties Added</td>
+                </tr>
+            </ng-template>
+           
+        </tbody>
+    </table>
+    
+</div>
+</div>

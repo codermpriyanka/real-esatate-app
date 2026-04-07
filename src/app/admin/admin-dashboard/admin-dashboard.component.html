@@ -1,0 +1,74 @@
+<section class="bg-[#6153CD] text-white py-6 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4"> Property Table</h1>
+      </section>
+<table class="w-full border my-4 text-center mx-4" [ngClass]="isDarkMode?'bg-gray-800 text-white':'bg-white text-black'">
+    <thead>
+        <tr class="bg-gray-400">
+            <th class="p-2">Sl No</th>
+            <th class="p-2">Property Name</th>
+            <th class="p-2">Added By</th>
+            <th class="p-2">Status</th>
+            <th class="p-2">Approve</th>
+        </tr>
+    </thead>
+    <ng-container *ngIf="properties.length>0; else NoProperty">
+        <tbody>
+            <tr *ngFor="let p of properties; let i=index">
+            <td class="p-2 border">{{i+1}}</td>
+            <td class="p-2 border">{{p.propertyName}}</td>
+            <td class="p-2 border">{{p.email}}</td>
+            <td class="p-2 border">
+                <span [ngClass]="{
+                    'text-yellow-500': p.status === 'pending',
+                    'text-green-500': p.status === 'approved'
+                }">{{p.status}}</span>
+            </td>
+            <td class="p-2 border">
+                <div class="inline-block" [title]="p.status === 'approved' ? 'Already Approved':''">
+                <button  class="bg-green-400 px-3 py-1 rounded" (click)="approveProperty(p.id)" [disabled]="p.status === 'approved'">Approve</button>
+                </div>
+            </td>
+            </tr>
+        </tbody>
+    </ng-container>
+    <ng-template #NoProperty>
+<tbody>
+    <tr>
+        <td colspan="5" class="text-center border p-4">
+            No Property Added Yet.
+        </td>
+    </tr>
+</tbody>
+    </ng-template>
+</table>
+<section class="bg-[#6153CD] text-white py-6 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Messages From User</h1>
+      </section>
+<table class="w-full border my-4 mx-4 text-center" [ngClass]="isDarkMode?'bg-gray-800 text-white':'bg-white text-black'">
+    <thead>
+        <tr class="bg-gray-400">
+            <th class="p-2">Index</th>
+            <th class="p-2">Name</th>
+            <th class="p-2">Email</th>
+            <th class="p-2">Message</th>
+            <th class="p-2">Date</th>
+            <th class="p-2">Status</th>
+            <th class="p-2">Action By Admin</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let m of messages;let i=index">
+            <td class="border p-2">{{i+1}}</td>
+            <td class="border p-2">{{m.name}}</td>
+            <td class="border p-2">{{m.email}}</td>
+            <td class="border p-2">{{m.message}}</td>
+            <td class="border p-2">{{m.date}}</td>
+            <td class="border p-2">{{m.status}}</td>
+            <td class="border p-2">
+                <div [title] ="m.status === 'read' ? 'Already Marked as Read':''" class="inline-block">
+                    <button class="px-2 py-2 border border-blue text-white rounded-lg" (click)="clickToRead(m.id)" [disabled]="m.status === 'read'" [ngClass]="m.status == 'read' ? 'bg-green-300 cursor-not-allowed':'bg-green-600 hover:bg-green-700'">  {{ m.status === 'read' ? 'Completed' : 'Mark as Read' }}</button>
+                </div>
+               </td>
+        </tr> 
+    </tbody>
+</table>

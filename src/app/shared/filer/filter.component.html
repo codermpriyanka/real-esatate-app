@@ -1,0 +1,29 @@
+<div class="flex justify-between gap-2 items-center p-4 rounded-xl shadow border" [ngClass]="isDarkMode?'bg-gray-800 text-white':'bg-white text-black'">
+    <div class="flex items-center gap-2">
+        <select name="" [ngModel]="selectedField" class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6153CD]" [ngClass]="isDarkMode?'bg-gray-800 text-white':'bg-white text-black'">
+            <option value="">Select</option>
+            <option value="">Name</option>
+            <option value="">Address</option>
+            <option value="">Price</option>
+            <option value="">Facilities</option>
+            <option value="">Photo</option>
+            <option value="">Date</option>
+            <option value="">Time</option>
+        </select>
+        <input type="text" [(ngModel)]="searchedText" placeholder="Search Text" (input)="filterData()"  class="border border-gray-300 rounded-lg px-3 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-[#6153CD]">
+    </div>
+    <div class="flex gap-2">
+        <button class="px-2 py-2 bg-green-300 text-white" (click)="exportToExcel()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition disabled:opacity-50">Export to Excel</button>
+        <button class="px-2 py-2 bg-green-300 text-white" (click)="exportToPDF()"  class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition disabled:opacity-50">Export to Pdf</button>
+    </div>
+</div>
+<div *ngIf="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50" [ngClass]="isDarkMode?'bg-gray-800 text-white':'bg-white text-black'">
+  
+    <div class="bg-white p-6 rounded-lg shadow text-center">
+      
+      <div class="loader mb-3"></div>
+      <p class="font-semibold">Processing...</p>
+  
+    </div>
+  
+  </div>
