@@ -12,7 +12,10 @@
                     Find your dream home with premium real estate flats.
     Modern living spaces designed for comfort and convenience.
                 </p>
-                <button class="bg-[#6153CD] py-2 px-4 text-white hover:bg-[#6153CD]/80 duration-300 rounded-lg">View More</button>
+                <button class="bg-[#6153CD] py-2 px-4 text-white hover:bg-[#6153CD]/80 duration-300 rounded-lg" (click)="showMore = !showMore"> {{ showMore ? 'View Less' : 'View More' }}</button>
+                <p *ngIf="showMore" class="mt-4 text-gray-500 text-sm md:text-base leading-relaxed">
+                    Step into a world where your dream home isn't just found—it's crafted to perfection. Discover premium real estate flats that redefine luxury, blending breathtaking design with unmatched comfort. Every corner speaks elegance, every detail is thoughtfully designed, and every moment feels like a step into a life you truly deserve. Experience modern living elevated to an extraordinary level, where convenience meets sophistication in the most seamless way.
+                  </p>
             </div>
             <div class="w-full md:w-1/2 relative flex justify-center">
                 <div class="relative">
