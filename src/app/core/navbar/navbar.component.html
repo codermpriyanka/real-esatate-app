@@ -7,6 +7,7 @@
             </a>
         </div>
         <div class="md:hidden flex justify-end items-center gap-6 mb-4">
+            <button class="bg-[#6153CD] text-white hover:bg-[#6153CD]/80 duration-300 rounded-lg py-2 px-4" (click)="login()">{{role ? 'Logout':'Get in Touch'}}</button>
             <button (click)="toggleTheme()">
                 <i *ngIf="!isDarkMode" class="fa-solid fa-moon text-[#6153CD]"></i>
                 <i *ngIf="isDarkMode" class="fa-regular fa-sun text-[#6153CD]"></i>
@@ -30,7 +31,7 @@
             </ul> 
         </div>
         <!-- Mobile View -->
-         <div *ngIf="isMenuOpen" class="md:hidden fixed bottom-0 left-0 top-0 w-[75%] h-full flex flex-col p-4 transition-all duration-300" [ngClass]="isDarkMode? 'bg-gray-900 text-white':'bg-white text-black'">
+         <div *ngIf="isMenuOpen" class="md:hidden fixed bottom-0 left-0 top-0 w-[75%] h-full flex flex-col p-4 transition-all duration-300" [ngClass]="isDarkMode? 'bg-gray-900 text-white':'bg-[#6153CD] text-black'">
                 <ul *ngIf="isMenuOpen" class="space-y-4 text-xl">
                     <li class="cursor-pointer py-4"><a routerLink="/about" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">About</a></li>
                 <li class="cursor-pointer py-4"><a routerLink="/services" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Services</a></li>

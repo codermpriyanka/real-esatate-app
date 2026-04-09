@@ -27,6 +27,10 @@ name:any
   this.loginService.user$.subscribe(user=>{
     if(user){
       this.setUserData(user)
+    }else{
+      this.userRoleName = null;
+      this.name = null;
+      this.userRole = null; 
     }
   })
   }
@@ -58,6 +62,9 @@ getUserData(){
 login(){
   if(this.role){
   this.authService.logOut()
+  this.userRoleName=null
+  this.name=null
+    this.userRole=null
     this.router.navigate(['./'])
   }else{
     this.authService.openLogin()
