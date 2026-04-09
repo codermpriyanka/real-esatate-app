@@ -48,7 +48,8 @@
     <h2 class="text-xl font-semibold mb-4">Added Properties</h2>
     <!-- <input type="text" placeholder="Search Property" [(ngModel)]="searchText" (input)="filterProperties()" class="border p-2 mb-3 w-full rounded"> -->
    <app-filter [tableData]="allProperties" (filteredData)="properties=$event"></app-filter>
-    <table class="w-full border my-4">
+   <div class="overflow-x-auto">
+    <table class="w-full border my-4 min-w-[900px]">
         <thead>
             <tr class="bg-gray-400">
                 <th class="p-2">Sl No</th>
@@ -98,6 +99,6 @@
            
         </tbody>
     </table>
-    
+   </div>
 </div>
 </div>

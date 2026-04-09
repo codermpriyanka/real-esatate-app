@@ -23,14 +23,15 @@ name:any
 
   ngOnInit() {
    this.getUserData() 
-   this.userRole=JSON.parse(sessionStorage.getItem('user')||'{}')
+   const storedUser = sessionStorage.getItem('user');
+   this.userRole = storedUser ? JSON.parse(storedUser) : null;
+   if (this.userRole) {
+    this.setUserData(this.userRole);  
+  }
+
   this.loginService.user$.subscribe(user=>{
     if(user){
       this.setUserData(user)
-    }else{
-      this.userRoleName = null;
-      this.name = null;
-      this.userRole = null; 
     }
   })
   }
@@ -62,10 +63,9 @@ getUserData(){
 login(){
   if(this.role){
   this.authService.logOut()
-  this.userRoleName=null
-  this.name=null
-    this.userRole=null
     this.router.navigate(['./'])
+    this.userRoleName=''
+    this.name=''
   }else{
     this.authService.openLogin()
   }
