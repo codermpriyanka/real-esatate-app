@@ -7,7 +7,11 @@ const routes: Routes = [
   {path:'login',loadChildren:()=>import('./pages/pages.module').then(m=>m.PagesModule)},
   {path:'admin',loadChildren:()=>import('./admin/admin.module').then(m=>m.AdminModule)},
   {path:'seller',loadChildren:()=>import('./seller/seller.module').then(m=>m.SellerModule)},
-  {path:'buyer',loadChildren:()=>import('./buyer/buyer.module').then(m=>m.BuyerModule)}
+  {path:'buyer',loadChildren:()=>import('./buyer/buyer.module').then(m=>m.BuyerModule)},
+   {
+    path: 'test',
+    component: HomeComponent
+  }
 ];
 
 @NgModule({

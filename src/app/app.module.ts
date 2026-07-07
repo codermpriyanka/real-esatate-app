@@ -10,16 +10,7 @@ import { PagesModule } from './pages/pages.module';
 import { CoreModule } from './core/core.module';
 import { AdminModule } from './admin/admin.module';
 import { SharedModule } from './shared/shared.module';
-
-import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-
-import { environment } from 'src/environments/environment';
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
-
+import {HttpClientModule} from '@angular/common/http'
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,23 +25,15 @@ import 'firebase/firestore';
     CoreModule,
     AdminModule,
     SharedModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
-    AngularFireStorageModule
+   HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
 
-  constructor(private afs: AngularFirestore) {
+  constructor() {
 
-    setTimeout(() => {
-      firebase.firestore().settings({
-        experimentalForceLongPolling: true
-      });
-    }, 0);
 
   }
 }

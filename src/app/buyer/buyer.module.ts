@@ -4,6 +4,7 @@ import { BuyerComponent } from './buyer/buyer.component';
 import { BuyerRoutingModule } from './buyer-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BuyerPurchaseComponent } from './buyer/buyer-purchase/buyer-purchase.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -13,7 +14,8 @@ import { BuyerPurchaseComponent } from './buyer/buyer-purchase/buyer-purchase.co
     CommonModule,
     BuyerRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+   SharedModule
   ],
   exports:[BuyerComponent]
 })

@@ -1,17 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoginserviceService {
+export class ContactServiceService {
+
   constructor(private http:HttpClient) { }
- 
-  loginUser(val:any){
-    return this.http.post('http://localhost:3000/api/auth/login',val)
+  sendMessage(data:any){
+    return this.http.post('http://localhost:3000/api/contact/send-message',data)
+    // name,email,message,sendBy,role
   }
-
-
- 
 }

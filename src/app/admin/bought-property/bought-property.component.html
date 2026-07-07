@@ -1,9 +1,5 @@
-<div [ngClass]="isDarkMode?'bg-gray-900 text-white':'bg-white text-black'">
-<section class="bg-[#6153CD] text-white py-6 text-center m-4">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4"> Property Table</h1>
-      </section>
       <div class="m-4">
-       <app-filter [tableData]="allPropertyData" [columns]="tableColumns" (filteredData) = "properties =$event"> </app-filter>
+      <app-filter [tableData]="boughtPropertyData" [columns]="tableColumns" (filteredData) = "properties =$event"> </app-filter>
       </div>
       <div class="w-full overflow-x-auto rounded-lg shadow px-4 my-4">
 <table class="min-w-full border text-center" [ngClass]="isDarkMode?'bg-gray-800 text-white':'bg-white text-black'">
@@ -15,32 +11,31 @@
             <th class="p-2">Property Price</th>
             <th class="p-2">Added By</th>
             <th class="p-2">Added On</th>
-            <th class="p-2">Status</th>
-            <th class="p-2">Approve</th>
+            <th class="p-2">Bought Status</th>
         </tr>
     </thead>
-    <ng-container *ngIf="properties.length>0;else NoProperty">
+    <ng-container *ngIf="boughtPropertyData.length>0;else NoProperty">
         <tbody>
-            <tr *ngFor="let prop of properties; let i=index">
+            <tr *ngFor="let prop of boughtPropertyData; let i=index">
                 <td class="p-2 border">{{i+1}}</td>
                 <td class="p-2 border">{{prop.name}}</td>
                 <td class="p-2 border">{{prop.address}}</td>
                 <td class="p-2 border">{{prop.price}}</td>
                 <td class="p-2 border">{{prop.addedBy}}</td>
                 <td class="p-2 border">{{formatDate(prop.addedOn)}}</td>
-                <td class="p-2 border">{{prop.verifyStatus}}</td>
-                <td class="p-2 border"><button class="bg-[#6153CD] text-white py-2 px-2 rounded-lg mt-2 disabled:bg-blue-200 disabled:text-gray-500 disabled:cursor-not-allowed"(click)="aprovePropperty(prop)"[disabled]="prop.verifyStatus=='Approved' || prop.verifyStatus=='approved'">{{prop.verifyStatus=='Approved' || prop.verifyStatus=='approved'?'Approved':'Approve'}}</button></td>
+                <td class="p-2 border">{{prop.propertyBoughtStatus}}</td>
+               
             </tr>
         </tbody>
     </ng-container>
     <ng-template #NoProperty>
+<tbody>
     <tr>
-        <td colspan="8" class="text-center border p-4">
+        <td colspan="5" class="text-center border p-4">
             No Property Added Yet.
         </td>
     </tr>
+</tbody>
     </ng-template>
 </table>
       </div>
-
-</div>

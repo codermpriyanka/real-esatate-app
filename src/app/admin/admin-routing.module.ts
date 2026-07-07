@@ -4,11 +4,15 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { ManagePropertyComponent } from './manage-property/manage-property.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { AuthGuard } from '../auth.guard';
+import { CheckMessageComponent } from './check-message/check-message.component';
+import { BoughtPropertyComponent } from './bought-property/bought-property.component';
 
 const routes: Routes = [
-  {path:'',component:AdminDashboardComponent},
-  {path:'property',component:ManagePropertyComponent,canActivate:[AuthGuard],data:{role:'admin'}},
-  {path:'users',component:ManageUsersComponent,canActivate:[AuthGuard],data:{role:'admin'}}
+  {path:'admin-dashboard',component:AdminDashboardComponent},
+  {path:'property',component:ManagePropertyComponent},
+  {path:'users',component:ManageUsersComponent},
+  {path:'check-message',component:CheckMessageComponent},
+  {path:'bought-property',component:BoughtPropertyComponent}
 ];
 
 @NgModule({

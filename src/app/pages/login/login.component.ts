@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import {NavbarService} from'../../core/navbar/navbar.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
 import { LoginserviceService } from './loginservice.service';
+import { AuthService } from '../auth/auth.service';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -11,59 +12,57 @@ import { LoginserviceService } from './loginservice.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  loginVal:boolean=false
   authForm:FormGroup
+  @Output() closeLogin= new EventEmitter<boolean>()
   isLogin=true
   user:any
   role:any
-  constructor(private NavbarService:NavbarService,private router:Router,private authService:AuthService,private loginService:LoginserviceService) { }
+  constructor(private NavbarService:NavbarService,private router:Router,private loginService:LoginserviceService,private authService:AuthService) { }
 
   ngOnInit() {
-    this.getLoginres()
     this.authForm=new FormGroup({
       email:new FormControl('',[Validators.required,Validators.email]),
       password:new FormControl(''),
     })
-    this.authService.loginModal$.subscribe(val=>{
-      this.loginVal=val
-    })
-    this.user=JSON.parse(sessionStorage.getItem("user"))
+
   }
-  getLoginres(){
- 
-  }
- 
-    async onSubmit(){
-      if(this.authForm.invalid) return;
-      const {email,password}=this.authForm.value
-      try{
-        //fetching login data from firestore
-        const user= await this.authService.login(email,password)
-        sessionStorage.setItem('user',JSON.stringify(user))
-        this.loginService.setUser(user)
-        this.role=user
-        if(user.role=='buyer'){
-          this.router.navigate(['buyer/buyer-dashboard'])
-          this.loginVal=false
-        } else if(user.role =='seller'){
-          this.router.navigate(['seller/seller-dashboard'])
-          this.loginVal=false
-        }else if(user.role == 'admin'){
-          this.router.navigate(['/admin'])
-          this.loginVal=false
+closeLoginForm(){
+  //send to parent to close the login
+  this.closeLogin.emit(false)
+}
+   onSubmit(){
+      this.loginService.loginUser(this.authForm.value).subscribe((res:any)=>{
+        console.log(res)
+        if(res.status === 200){
+       sessionStorage.setItem('token', res.token);
+       sessionStorage.setItem('firstName',res.user.firstName)
+       sessionStorage.setItem('role',res.user.role)
+       sessionStorage.setItem('email',res.user.email)
+       sessionStorage.setItem("userid",res.user.id)
+       //behavior subject to show the user name in nav immediately
+       this.authService.isLoggedin.next(true)
+        if(res.user.role == 'buyer'){
+         this.router.navigate(['buyer/buyer-dashboard'])
+        } else if(res.user.role == 'seller'){
+         this.router.navigate(['seller/seller-dashboard'])
+        } else if(res.user.role == 'admin'){
+this.router.navigate(['admin/admin-dashboard'])
         }
-      }catch(err){
-        console.log(err)
-        alert("inavalid credential")
-      }
+        this.authService.loginScreen.next(false)
+        }
+      },(err)=>{
+        if(err.status === 404){
+          alert("User not found")
+        } else if(err.status === 401){
+          alert("Invalid Credentials")
+        }
+      })
     }
 
-  closeLoginModal(){
-    this.authService.closeAll()
-  }
   openSignupForm(){
-   this.authService.openSignup()
    this.router.navigate(['/signup'])
+   this.closeLogin.emit(false)
+   this.authService.signupFlag.next(true)
   }
 
 }

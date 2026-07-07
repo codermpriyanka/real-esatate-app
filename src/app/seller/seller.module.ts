@@ -5,8 +5,6 @@ import { SellerRoutingModule } from './seller-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 
-
-
 @NgModule({
   declarations: [SellerComponent],
   imports: [

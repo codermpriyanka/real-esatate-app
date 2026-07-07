@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SellerComponent } from './seller/seller.component';
 import { AuthGuard } from '../auth.guard';
 const routes:Routes=[
-  {path:'seller-dashboard',component:SellerComponent,canActivate:[AuthGuard],data:{role:'seller'}}
+  {path:'seller-dashboard',component:SellerComponent}
 ]
 
 @NgModule({

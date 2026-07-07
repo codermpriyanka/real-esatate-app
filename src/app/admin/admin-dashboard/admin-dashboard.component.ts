@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import {NavbarService} from'../../core/navbar/navbar.service';
+import { AdminDashboardService } from './admin-dashboard.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -8,51 +8,49 @@ import {NavbarService} from'../../core/navbar/navbar.service';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
-  properties:any[]=[]
-  messages:any[]=[]
   isDarkMode:boolean=false;
-  constructor(private firestore:AngularFirestore,private NavbarService:NavbarService) { }
+  allPropertyData:any[]=[];
+  properties:any[]=[]
+  propertyId:any
+  constructor(private NavbarService:NavbarService,private adminService:AdminDashboardService) { }
 
   ngOnInit() {
-    this.getProperties()
-    this.getContactMessage()
+    this.getPropertiesData()
     this.getDarkMode()
   }
-  getProperties() {
-    this.firestore.collection('properties').snapshotChanges().subscribe((res: any) => {
-      this.properties = res.map((e: any) => {
-        const data = e.payload.doc.data();
-        const id = e.payload.doc.id;
-        return { id, ...data };
-      });
-    });
+  tableColumns=[
+    {key:'name',label:'Property Name'},
+    {key:'address',label:'Property Address'},
+    {key:'price',label:'Property Price'},
+    {key:'addedBy',label:'Added By'},
+    {key:'addedOn',label:'Added On'},
+    {key:'verifyStatus',label:'Verify Status'}
+  ]
+  getPropertiesData() {
+  this.adminService.getPropertyList().subscribe((res:any)=>{
+    console.log(res)
+    this.allPropertyData=res.data
+    this.properties=res.data
+  })
   }
-  async approveProperty(id: string) {
-    await this.firestore.collection('properties').doc(id).update({
-      status: 'approved'
-    });
-  
-    alert("Property Approved");
-  }
+aprovePropperty(data:any){
+  const id=data._id
+  this.adminService.adminApproveProperty(id).subscribe((res:any)=>{
+    console.log(res)
+    if(res.status==200){
+alert("Property Approved Successfully.")
+this.getPropertiesData()
+    }
+  },err=>{
+    console.log(err)
+  })
 
-getContactMessage(){
-this.firestore.collection('messages',ref=>ref.orderBy('date','desc')
-).snapshotChanges().subscribe(res=>{
-  this.messages = res.map((e: any) => {
-    const data = e.payload.doc.data();
-    const id = e.payload.doc.id;
-    return { id, ...data };
-})
-})
-  }
+}
 
-  async clickToRead(id:string){
-    await this.firestore.collection('messages').doc(id).update({
-      status:'Read'
-    })
-  }
-
-    
+formatDate(date: any): string {
+  return new Date(date).toLocaleDateString();
+}
+     
 getDarkMode(){
   this.NavbarService.darkTheme$.subscribe((res)=>{
   console.log(res)

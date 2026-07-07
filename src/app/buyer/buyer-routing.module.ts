@@ -6,8 +6,8 @@ import { BuyerPurchaseComponent } from './buyer/buyer-purchase/buyer-purchase.co
 import { AuthGuard } from '../auth.guard';
 
 const routes:Routes=[
-  {path:'buyer-dashboard',component:BuyerComponent,canActivate:[AuthGuard],data:{role:'buyer'}},
-  {path:'buyer-purchase',component:BuyerPurchaseComponent,canActivate:[AuthGuard],data:{role:'buyer'}}
+  {path:'buyer-dashboard',component:BuyerComponent},
+  {path:'buyer-purchase',component:BuyerPurchaseComponent}
 ]
 
 @NgModule({ 

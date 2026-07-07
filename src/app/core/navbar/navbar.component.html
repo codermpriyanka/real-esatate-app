@@ -6,24 +6,45 @@
                 <span class="text-2xl sm:text-3xl font-semibold text-primary text-[#6153CD]">Logo</span>
             </a>
         </div>
-        <div class="md:hidden flex justify-end items-center gap-6 mb-4 z-50">
-            <button class="bg-[#6153CD] text-white hover:bg-[#6153CD]/80 duration-300 rounded-lg py-2 px-4" (click)="login()">{{role ? 'Logout':'Get in Touch'}}</button>
+        <div class="md:hidden flex items-center gap-3 z-50">
+            <button class="bg-[#6153CD] text-white text-sm hover:bg-[#6153CD]/80 duration-300 rounded-lg px-1 py-1" (click)="token ? logout():openLogin()">{{token?'Log Out':'Get in Touch'}}</button>
+           
             <button (click)="toggleTheme()">
-                <i *ngIf="!isDarkMode" class="fa-solid fa-moon text-[#6153CD]"></i>
-                <i *ngIf="isDarkMode" class="fa-regular fa-sun text-[#6153CD]"></i>
+                <i *ngIf="!isDarkMode" class="fa-solid fa-moon text-[#6153CD] text-xl"></i>
+        <i *ngIf="isDarkMode" class="fa-regular fa-sun text-[#6153CD] text-xl"></i>
             </button>
-            <button (click)="toggleMenu()" class="text-[#6153CD] z-50"><i class="fa-solid fa-bars"></i></button>
+                <button (click)="toggleMenu()"class="text-[#6153CD] text-2xl z-50">
+        <i *ngIf="!isMenuOpen" class="fa-solid fa-bars"></i>
+    </button>
            </div>
         <div class="hidden md:block">
             <ul class="flex items-center gap-4 px-2">
                 <li class="cursor-pointer py-4"><a routerLink="/about" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">About</a></li>
                 <li class="cursor-pointer py-4"><a routerLink="/services" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Services</a></li>
-                <li class="cursor-pointer py-4"><a routerLink="/contact" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Contact</a></li>
-                <li *ngIf="userRoleName ==='seller'" class="cursor-pointer py-4"><a routerLink="/seller/seller-dashboard" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Seller Dashboard</a></li>
-                <li *ngIf="userRoleName ==='buyer'" class="cursor-pointer py-4"><a routerLink="/buyer/buyer-dashboard" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Buyer Dashboard</a></li>
-                <li *ngIf="userRoleName ==='buyer'" class="cursor-pointer py-4"> <a routerLink="/buyer/buyer-purchase"  class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 transition-all duration-300">My Purchases</a></li>
-                <li class="cursor-pointer py-4 text-lg font-medium">{{name}}</li>
-                <button class="bg-[#6153CD] text-white hover:bg-[#6153CD]/80 duration-300 rounded-lg py-2 px-4" (click)="login()">{{role ? 'Logout':'Get in Touch'}}</button>
+              <li *ngIf="role === 'admin'" class="relative group cursor-pointer py-4">
+  <a
+    routerLink="/admin-dashboard"
+    class="text-lg font-medium hover:text-[#6153CD]">
+    Admin Dashboard
+  </a>
+
+  <ul class="hidden group-hover:block absolute left-0 top-full bg-white shadow-lg min-w-[180px]">
+    <li>
+      <a
+        routerLink="/bought-property"
+        class="block px-4 py-2 hover:bg-gray-100">
+        Bought Property
+      </a>
+    </li>
+  </ul>
+</li>
+                <li *ngIf="role!='admin'" class="cursor-pointer py-4"><a routerLink="/contact" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Contact</a></li>
+                <li *ngIf="role ==='admin'" class="cursor-pointer py-4"><a routerLink="/check-message" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Check Message</a></li>
+                <li *ngIf="role ==='seller'" class="cursor-pointer py-4"><a routerLink="/seller/seller-dashboard" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Seller Dashboard</a></li>
+                <li *ngIf="role ==='buyer'" class="cursor-pointer py-4"><a routerLink="/buyer/buyer-dashboard" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Buyer Dashboard</a></li>
+                <li *ngIf="role ==='buyer'" class="cursor-pointer py-4"> <a routerLink="/buyer/buyer-purchase"  class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 transition-all duration-300">My Purchases</a></li>
+                <li class="cursor-pointer py-4 text-lg font-medium text-[#6153CD]">{{firstName}}</li>
+                <button class="bg-[#6153CD] text-white hover:bg-[#6153CD]/80 duration-300 rounded-lg py-1.5 px-3 text-sm whitespace-nowrap" (click)="token ? logout():openLogin()">{{token?'Log Out':'Get in Touch'}}</button>
                 <button (click)="toggleTheme()">
                     <i *ngIf="!isDarkMode" class="fa-solid fa-moon text-[#6153CD]"></i>
                     <i *ngIf="isDarkMode" class="fa-regular fa-sun text-[#6153CD]"></i>
@@ -31,18 +52,29 @@
             </ul> 
         </div>
         <!-- Mobile View -->
-         <div *ngIf="isMenuOpen" class="md:hidden fixed bottom-0 left-0 top-0 w-[55%] h-full flex flex-col p-4 transition-all duration-300 z-40" [ngClass]="isDarkMode? 'bg-gray-900 text-white':'bg-[#6153CD] text-black'">
-                <ul *ngIf="isMenuOpen" class="space-y-4 text-xl w-[75%]">
-                    <li class="cursor-pointer py-4"><a routerLink="/about" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">About</a></li>
-                <li class="cursor-pointer py-4"><a routerLink="/services" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Services</a></li>
-                <li class="cursor-pointer py-4"><a routerLink="/contact" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Contact</a></li>
-                <li *ngIf="userRoleName ==='seller'" class="cursor-pointer py-4"><a routerLink="/seller/seller-dashboard" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Seller Dashboard</a></li>
-                <li *ngIf="userRoleName ==='buyer'" class="cursor-pointer py-4"><a routerLink="/buyer/buyer-dashboard" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Buyer Dashboard</a></li>
-                <li *ngIf="userRoleName ==='buyer'" class="cursor-pointer py-4"> <a routerLink="/buyer/buyer-purchase"  class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 transition-all duration-300">My Purchases</a></li>
+         <div *ngIf="isMenuOpen" class="fixed inset-0 bg-black/50 z-40" (click)="toggleMenu()"></div>
+<div class="fixed top-0 left-0 h-screen w-72 z-50 transform transition-transform duration-300" [ngClass]="[isMenuOpen ? 'translate-x-0' : '-translate-x-full', isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black']">
+    <div class="flex justify-between items-center p-5 border-b">
+        <h2 class="text-xl font-semibold text-[#6153CD]">Menu</h2>
+
+        <button (click)="toggleMenu()">
+            <i class="fa-solid fa-xmark text-2xl"></i>
+        </button>
+    </div>
+                 <ul class="flex flex-col p-5 space-y-5">
+                      <li class="cursor-pointer py-4 text-lg font-medium text-[#6153CD]">{{firstName}}</li>
+                    <li class="cursor-pointer py-4"><a routerLink="/about" (click)="toggleMenu()">About</a></li>
+                <li class="cursor-pointer py-4"><a routerLink="/services" (click)="toggleMenu()">Services</a></li>
+                <li *ngIf="role!='admin'" class="cursor-pointer"><a routerLink="/contact" (click)="toggleMenu()">Contact</a></li>
+                <li *ngIf="role ==='admin'" class="cursor-pointer"><a routerLink="/check-message" (click)="toggleMenu()">Check Message</a></li>
+                <li *ngIf="role ==='seller'" class="cursor-pointer"><a routerLink="/seller/seller-dashboard" (click)="toggleMenu()">Seller Dashboard</a></li>
+                <li *ngIf="role ==='buyer'" class="cursor-pointer"><a routerLink="/buyer/buyer-dashboard" (click)="toggleMenu()">Buyer Dashboard</a></li>
+                <li *ngIf="role ==='buyer'" class="cursor-pointer"> <a routerLink="/buyer/buyer-purchase" (click)="toggleMenu()">My Purchases</a></li>
+              
                 </ul>
          </div>
     </div>
 </nav>
 
-<app-login></app-login>
+<app-login *ngIf="loginScreen" (closeLogin)="loginScreen=$event"></app-login>
 

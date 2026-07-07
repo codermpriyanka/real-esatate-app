@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {NavbarService} from'../../core/navbar/navbar.service';
+import { SellerServiceService } from './seller-service.service';
 
 @Component({
   selector: 'app-seller',
@@ -10,144 +10,199 @@ import {NavbarService} from'../../core/navbar/navbar.service';
 })
 export class SellerComponent implements OnInit {
   propertyForm:FormGroup
+ selectedFacilities: string[] = [];
   isDarkMode:boolean=false;
-  selectedFile: File | null = null;
-  base64Image: string = '';
-previewUrl: any = null;
-  showForm:boolean=false;
-  facilities:string[]=[]
-  properties:any[]=[]
-  allProperties:any=[]
-  searchText:string=''
-  user:any;
-  editMode:boolean=false;
-  editId:string='';
-  constructor(private firestore:AngularFirestore,private NavbarService:NavbarService) { }
+  previewUrl: any;
+  openEditModal:boolean=false;
+  selectedId:any
+  showForm:boolean=false
+  allProperties:any[]=[]
+  properties:any[]=[];
+
+  constructor(private NavbarService:NavbarService,private sellerService:SellerServiceService) { }
 
   ngOnInit() {
     this.propertyForm=new FormGroup({
-      propertyName:new FormControl(''),
-      address:new FormControl(''),
-      price:new FormControl(''),
+      propertyName:new FormControl('',[Validators.required,Validators.pattern('^[A-Za-z0-9\\- ]+$')]),
+      address:new FormControl('',[Validators.required, Validators.pattern('^[A-Za-z0-9,./\\- ]+$')]),
+      price:new FormControl('',[Validators.required,Validators.pattern('^[0-9]+$')]),
+      facilities:new FormControl([]),
+      photo:new FormControl(null,Validators.required)
     })
-    this.getProperties()
-    this.user= JSON.parse(sessionStorage.getItem('user') || '{}') as any;
-    console.log(this.user ,"user id")
-    this.getDarkMode()
+  this.getAllPropertiesRecord()
   }
-
-
-  onFacilityChange(event:any,value:string){
- if(event.target.checked){
-  this.facilities.push(value)
- }else{
-  this.facilities=this.facilities.filter(f=>f!==value)
- }
-  }
+resetForm(){
+  this.openEditModal=false;
+  this.selectedId=null;
+  this.propertyForm.reset();
+  this.selectedFacilities=[];
+  this.previewUrl=null;
+  this.getAllPropertiesRecord()
+}
+tableColumns=[
+  {key:'name',label:'Name'},
+  {key:'address',label:'Address'},
+  {key:'price',label:'Price'},
+  {key:'facilities',label:'Facilities'},
+  {key:'addedBy',label:'Added By'},
+  {key:'addedOn',label:'Added On'}
+]
   async onSubmit(){
-    const now=new Date()
-  const data={
-    propertyName: this.propertyForm.value.propertyName,
-    address: this.propertyForm.value.address,
-    price: this.propertyForm.value.price,
-    photo:  this.base64Image,
-    facilities:this.facilities,
-    userId:this.user.uid,
-    email:this.user.email,
-    status:'Pending',
-    date:now.toLocaleDateString(),
-    time:now.toLocaleTimeString()
-  };
-  if(this.editMode){
-    await this.firestore.collection('properties').doc(this.editId).update(data)
-    alert("Property Updated")
-    this.editMode=false;
-    this.editId=''
- 
-  } else{
-    data.photo=this.base64Image
-    await this.firestore.collection('properties').add(data);
-    alert("Proprty Added")
-  }
-  //storing data to firestore
- 
-  this.propertyForm.reset()
-  this.facilities=[]
-  this.base64Image = '';
-  this.previewUrl=null
-  this.showForm=false;
-  this.getProperties()
-  }
+    console.log("Facilities from form:", this.propertyForm.value.facilities);
+console.log(
+  "Facilities JSON:",
+  JSON.stringify(this.propertyForm.value.facilities)
+);
+  const formData = new FormData();
+    formData.append(
+  'name',
+    this.propertyForm.value.propertyName
+  );
+  formData.append(
+    'address',
+    this.propertyForm.value.address
+  );
+  formData.append(
+    'price',
+    this.propertyForm.value.price
+  );
 
-  getProperties(){
-    this.firestore.collection('properties').snapshotChanges().subscribe((res)=>{
-     this.allProperties=res.map((e:any)=>{
-      const data=e.payload.doc.data();
-      const id=e.payload.doc.id;
-      return {id,...data}
-     })
-    this.properties=this.allProperties
+  formData.append(
+    'facilities',
+      JSON.stringify(this.propertyForm.value.facilities)
+    
+  );
+
+  formData.append(
+    'addedBy',
+    sessionStorage.getItem('firstName') || ''
+  );
+
+  formData.append(
+    'addedById',
+    sessionStorage.getItem('userid') || ''
+  );
+
+  if (this.propertyForm.value.photo) {
+    formData.append(
+      'photos',
+      this.propertyForm.value.photo
+    );
+  }
+  console.log('selectedId =', this.selectedId);
+   if(this.selectedId){
+    this.sellerService.updateProperty(this.selectedId,formData).subscribe((res)=>{
+      console.log(res)
+      alert("Property updated successfully")
+      this.resetForm()
+      this.getAllPropertiesRecord()
+    })
+   }else{
+ this.sellerService.addProperty(formData).subscribe((res)=>{
+    console.log(res)
+        alert("Property Added Successfully")
+         this.resetForm()
+    this.getAllPropertiesRecord()
+   },err=>{
+    console.log(err)
+   })
+   }
+    this.showForm=false;
+    console.log(this.propertyForm.value.photo); 
+  }
+  deleteButton(data:any){
+    this.selectedId=data._id
+this.sellerService.deleteProperty(this.selectedId,data).subscribe((res)=>{
+console.log(res)
+alert("Property Deleted Successfully")
+ this.getAllPropertiesRecord()
+},(err)=>{
+  console.log(err)
+})
+  }
+onFacilityChange(event:any){
+  if(event.target.checked){
+    this.selectedFacilities.push(event.target.value)
+  } else{
+     this.selectedFacilities =
+      this.selectedFacilities.filter(x => x !== event.target.value);
+  }
+  this.propertyForm.patchValue({
+    facilities:this.selectedFacilities
+  })
+
+}
+  getAllPropertiesRecord(){
+    this.sellerService.getAllProperties().subscribe((res:any)=>{
+      console.log(res)
+      this.allProperties=res.data
+      this.properties=res.data
+       this.allProperties.forEach(item => {
+      console.log('Facilities:', item.facilities);
+      console.log('Type:', typeof item.facilities);
+    });
     })
   }
-
+formatDate(date: any): string {
+  return new Date(date).toLocaleDateString();
+}
+cancelAddProperty(){
+  this.showForm=false;
+}
   filterProperties(){
-    const text= this.searchText.toLowerCase().trim()
-    this.properties=this.allProperties.filter(p=>
-      p.propertyName.toLowerCase().includes(text) ||
-      p.address.toLowerCase().includes(text) ||
-      p.price.toLowerCase().includes(text) ||
-      p.facilities.join(',').toLowerCase().includes(text)
-    )
+ 
   }
-  editButton(p:any){
-this.showForm =true;
-this.editMode=true;
-this.editId=p.id;
-this.propertyForm.patchValue({
-  propertyName:p.propertyName,
-  address:p.address,
-  price:p.price
-})
-this.facilities = p.facilities || []
-this.base64Image = p.photo || '';
-this.previewUrl = p.photo || null;
+  editButton(data:any){
+this.openEditModal=true;
+  if (
+    Array.isArray(data.facilities) &&
+    data.facilities.length === 1 &&
+    data.facilities[0].includes(',')
+  ) {
+    this.selectedFacilities = data.facilities[0].split(',');
+  } else {
+    this.selectedFacilities = data.facilities || [];
+  }
+this.selectedId=data._id
+ this.propertyForm.patchValue({
+   propertyName:data.name,
+      address:data.address,
+      price:data.price,
+      facilities:data.facilities,
+      photo:data.photo
+ })
+ this.previewUrl=data.photos ?'http://localhost:3000/uploads/'+data.photos :'';
+ this.selectedFacilities=data.facilities || [];
+ console.log(this.selectedFacilities ,"selected facili")
   }  
-  async deleteButton(id:string){
-    const confirmDelete= confirm("Are You Sure Want to delete ?");
-    if(confirmDelete){
-      await this.firestore.collection('properties').doc(id).delete()
-      alert("Property Deleted")
-    }
+
+  updateSubmit(){
+
   }
-  onFileChange(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          const img = new Image();
-          img.src = e.target.result;
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 400;   
-            const scaleSize = MAX_WIDTH / img.width;
-            canvas.width = MAX_WIDTH;
-            canvas.height = img.height * scaleSize;
-            const ctx = canvas.getContext('2d');
-            if (ctx) {
-              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            }
-            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
-            this.previewUrl = compressedBase64;
-            this.base64Image = compressedBase64;
-          };
-        };
-        reader.readAsDataURL(file);
-      } else {
-        alert('Only images allowed');
-      }
-    }
+
+  closeModal(){
+    this.openEditModal=false;
   }
+  
+ 
+onFileChange(event: any) {
+  const file = event.target.files[0];
+
+  if (file) {
+
+    this.propertyForm.patchValue({
+      photo: file
+    });
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.previewUrl = reader.result;
+    };
+
+    reader.readAsDataURL(file);
+  }
+} 
  getDarkMode(){
   this.NavbarService.darkTheme$.subscribe((res)=>{
     console.log(res)

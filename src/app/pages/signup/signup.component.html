@@ -1,13 +1,13 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
+<div *ngIf="signUpOpenFlag" class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
       <!-- LEFT IMAGE -->
-      <div class="hidden md:block">
+      <div class="hidden md:flex">
         <img src="assets/images/signupimage.png"
-             class="h-full w-full object-contain">
+             class="h-auto w-64 object-contain">
       </div>
       <!-- RIGHT FORM -->
       <div class="p-8 flex flex-col justify-center relative">
-        <i class="fas fa-window-close text-[#6153CD] cursor-pointer absolute top-4 right-4"></i>
+             <i class="fas fa-window-close text-[#6153CD] absolute top-2 right-2 cursor-pointer"(click)="closeSignUpForm()"></i>
         <h2 class="text-2xl font-bold text-[#6153CD] mb-6 text-center">
           Create Account
         </h2>
@@ -24,7 +24,18 @@
               <option value="seller">Seller</option>
             </select>
           </div>
-  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label for="">First Name</label>
+     <input type="text" formControlName="firstName"
+                   class="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#6153CD]">
+    </div>
+    <div>
+      <label for="">Last Name</label>
+     <input type="text" formControlName="lastName"
+                   class="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#6153CD]">
+    </div>
+  </div>
           <!-- Email -->
           <div>
             <label>Email</label>

@@ -13,6 +13,7 @@
   })
   export class FilerComponent implements OnInit {
   @Input() tableData :any[]=[]
+  @Input() columns:any[]=[]
   @Output() filteredData=new EventEmitter<any[]>()
   selectedField:string=''
   searchedText:string=''
@@ -23,7 +24,10 @@
     ngOnInit() {
       this.getDarkMode()
     }
+   
     filterData(){
+      console.log("clicked")
+      console.log("tableData",this.tableData)
       const text=this.searchedText.toLowerCase().trim()
     if(!text){
       this.filteredData.emit(this.tableData)
@@ -43,6 +47,7 @@
       return value.toString().toLowerCase().includes(text)
     })
     this.filteredData.emit(filtered)
+    console.log(filtered ,"filtered")
   }
 
 

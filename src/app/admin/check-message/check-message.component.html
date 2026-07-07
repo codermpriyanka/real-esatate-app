@@ -1,0 +1,39 @@
+<div [ngClass]="isDarkMode?'bg-gray-900 text-white':'bg-white text-black'">
+<section class="bg-[#6153CD] text-white py-6 text-center m-4">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4"> Messages From Users</h1>
+      </section>
+            <div class="w-full overflow-x-auto rounded-lg shadow px-4 my-4">
+<table class="min-w-full border text-center" [ngClass]="isDarkMode?'bg-gray-800 text-white':'bg-white text-black'">
+<thead>
+    <tr class="bg-gray-400">
+        <th class="p-2">Sl No</th>
+        <th class="p-2">Send By</th>
+        <th class="p-2">Sender Name</th>
+        <th class="p-2">Sender Email</th>
+        <th class="p-2">Message</th>
+    </tr>
+</thead>
+<ng-container *ngIf="messageBox.length>0;else NoMessage">
+    <tbody>
+        <tr *ngFor="let mess of messageBox; let i=index">
+<td class="p-2 border">{{i+1}}</td>
+<td class="p-2 border">{{mess.sendBy}}</td>
+<td class="p-2 border">{{mess.name}}</td>
+<td class="p-2 border">{{mess.email}}</td>
+<td class="p-2 border">{{mess.message}}</td>
+        </tr>
+    </tbody>
+</ng-container>
+<ng-template #NoMessage>
+    <tbody>
+        <tr>
+            <td colspan="5" class="text-center border p-4">
+                No Messages Found
+            </td>
+        </tr>
+    </tbody>
+</ng-template>
+
+      </table>
+            </div>
+</div>

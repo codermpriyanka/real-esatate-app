@@ -7,9 +7,9 @@
       <div class="bg-white p-8 rounded-2xl shadow">
         <h2 class="text-2xl font-bold mb-6 text-gray-800">Send Message</h2>
         <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
-          <input type="text" formControlName="name" placeholder="Your Name"class="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6153CD]">
-          <input type="email" formControlName="email" placeholder="Your Email"class="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6153CD]">
-          <textarea rows="4"   formControlName="message" placeholder="Your Message"class="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6153CD]"></textarea>
+          <input type="text" formControlName="name" placeholder="Your Name"class="w-full border p-3 mb-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6153CD]">
+          <input type="email" formControlName="email" placeholder="Your Email"class="w-full border p-3 mb-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6153CD]">
+          <textarea rows="4"   formControlName="message" placeholder="Your Message"class="w-full border p-3 mb-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6153CD]"></textarea>
           <button type="submit" class="w-full bg-[#6153CD] text-white py-3 rounded-lg hover:bg-[#6153CD]/80 transition">
             Send Message
           </button>
@@ -18,11 +18,11 @@
       <div class="flex flex-col justify-center space-y-6">
         <div class="flex items-center gap-4">
           <i class="fa-solid fa-location-dot text-2xl text-[#6153CD]"></i>
-          <p class="text-gray-700">Pune, India</p>
+          <p class="text-gray-700">Delhi, India</p>
         </div>
         <div class="flex items-center gap-4">
           <i class="fa-solid fa-envelope text-2xl text-[#6153CD]"></i>
-          <p class="text-gray-700">your@email.com</p>
+          <p class="text-gray-700">priyankamuduli100@email.com</p>
         </div>
         <div class="flex items-center gap-4">
           <i class="fa-solid fa-phone text-2xl text-[#6153CD]"></i>

@@ -18,33 +18,30 @@ role:any;
 userRole:any
 userRoleName:any
 name:any
+firstName:any
+token:any
 
   constructor(private NavbarService:NavbarService,private authService:AuthService,private router:Router,private loginService:LoginserviceService) { }
 
   ngOnInit() {
-   this.getUserData() 
-   const storedUser = sessionStorage.getItem('user');
-   this.userRole = storedUser ? JSON.parse(storedUser) : null;
-   if (this.userRole) {
-    this.setUserData(this.userRole);  
-  }
+    this.authService.loginScreen.subscribe((res)=>{
+      this.loginScreen = res;
+    })
 
-  this.loginService.user$.subscribe(user=>{
-    if(user){
-      this.setUserData(user)
+  this.authService.isLoggedin.subscribe((res)=>{
+    if(res){
+ this.token=sessionStorage.getItem("token")
+   this.firstName=sessionStorage.getItem("firstName")
+   this.role=sessionStorage.getItem("role")
+  console.log(this.firstName)
+    }else{
+      this.token =null;
+      this.firstName=null;
+      this.role=null;
     }
   })
   }
 
-  setUserData(user:any){
-   this.userRole=user
-   const email = this.userRole.email || '';
-   this.name = email.split('@')[0];
-   this.name = this.name.charAt(0).toUpperCase() + this.name.slice(1);
-   console.log(this.name ,"namee")
-   this.userRoleName=this.userRole.role;
-   console.log(this.userRoleName ,"user role name")
-  }
 
 toggleTheme(){
   this.isDarkMode=!this.isDarkMode
@@ -54,21 +51,18 @@ toggleMenu(){
   this.isMenuOpen=!this.isMenuOpen  
 }
 getUserData(){
-  this.authService.user$.subscribe((res)=>{
-    console.log(res)
-    this.role=res
-  })
 }
-//coming form authservice 
-login(){
-  if(this.role){
-  this.authService.logOut()
-    this.router.navigate(['./'])
-    this.userRoleName=''
-    this.name=''
-  }else{
-    this.authService.openLogin()
-  }
+openLogin(){
+ this.loginScreen=true
+}
+
+logout(){
+  sessionStorage.clear()
+  this.authService.isLoggedin.next(false)
+  this.token=null
+  this.firstName=null
+  this.role=null
+  this.router.navigate(['/'])
 }
 
 }

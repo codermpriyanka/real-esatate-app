@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {NavbarService} from'../../core/navbar/navbar.service';
+import { BuyerServiceService } from './buyer-service.service';
 @Component({
   selector: 'app-buyer',
   templateUrl: './buyer.component.html',
@@ -9,74 +9,66 @@ import {NavbarService} from'../../core/navbar/navbar.service';
 })
 export class BuyerComponent implements OnInit {
 
-  constructor(private firestore:AngularFirestore,private NavbarService:NavbarService) { }
-  properties:any[]=[]
+  constructor(private NavbarService:NavbarService,private buyerService:BuyerServiceService) { }
   showBuyModal = false;
-  boughtPropertyIds: string[] = []; 
+  buyerProperty:any[]=[]
 selectedProperty: any;
+selectedPropertyId:any
 buyForm: FormGroup;
 user:any
+userid:any
 isDarkMode:boolean=false;
   ngOnInit() {
     this.getApprovedProperties()
-    this.getBoughtProperties()
     this.buyForm = new FormGroup({
-      name: new FormControl('', Validators.required),
-      email: new FormControl('', Validators.required),
-      mobile: new FormControl('', Validators.required),
+      name: new FormControl('', [Validators.required,Validators.pattern('^[A-Za-z ]+$')]),
+      email: new FormControl('', [Validators.required,Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]),
+      mobile: new FormControl('', [Validators.required,Validators.pattern('^[6-9][0-9]{9}$')]),
       paymentMethod: new FormControl('', Validators.required),
       transactionId: new FormControl('', Validators.required)
     });
     this.user= JSON.parse(sessionStorage.getItem('user') || '{}') as any;
  this.getDarkMode()
+ this.userid=sessionStorage.getItem("userid")
   }
 
-  getBoughtProperties() {
-    this.firestore.collection('orders').snapshotChanges().subscribe((res: any) => {
-      this.boughtPropertyIds = res.map((e: any) => {
-        const data = e.payload.doc.data();
-        return data.propertyId;
-      });
-    });
-  }
+ 
   getApprovedProperties() {
-    this.firestore.collection('properties', ref => ref.where('status', '==', 'approved')
-    ).snapshotChanges().subscribe((res: any) => {
-      this.properties = res.map((e: any) => {
-        const data = e.payload.doc.data();
-        const id = e.payload.doc.id;
-        return { id, ...data };
-      });
-    });
+    this.buyerService.buyerEligbleProperty().subscribe((res:any)=>{
+      console.log(res)
+      this.buyerProperty=res.data
+    },err=>{
+      console.log(err)
+    })
   }
+  formatDate(date: any): string {
+  return new Date(date).toLocaleDateString();
+}
 
-  openBuyModal(p: any) {
-    this.selectedProperty = p;
+  openBuyModal(id: any) {
+    this.selectedPropertyId = id;
+    console.log(this.selectedPropertyId ,"selected d")
     this.showBuyModal = true;
   }
-  closeModal() {
-    this.showBuyModal = false;
+  async submitBuy(){
+    const payload = {
+  name: sessionStorage.getItem("firstName"),
+  email: this.buyForm.value.email,
+  mobile: this.buyForm.value.mobile,
+  paymentMethod: this.buyForm.value.paymentMethod,
+  transactionId: this.buyForm.value.transactionId,
+  buyerId:this.userid
+};
+    this.buyerService.buyProperty( this.selectedPropertyId,payload).subscribe((res:any)=>{
+      console.log(res)
+      alert("Property Purchased Successfully")
+    })
+   this.showBuyModal = false;
     this.buyForm.reset();
   }
-
-  async submitBuy(){
-    if(this.buyForm.invalid){
-      alert("Please fill All Fields")
-      return
-    }
-    const data = {
-      ...this.buyForm.value,
-      propertyId: this.selectedProperty.id,
-      propertyName: this.selectedProperty.propertyName,
-      price: this.selectedProperty.price,
-      email: this.user.email,  
-      date: new Date(),
-      status: 'bought'
-    };
-    await this.firestore.collection('orders').add(data)
-    alert("Property Bought Successfully");
-    console.log("DATA GOING TO FIRESTORE:", data); 
-    this.closeModal()
+   closeModal() {
+    this.showBuyModal = false;
+    this.buyForm.reset();
   }
   getDarkMode(){
     this.NavbarService.darkTheme$.subscribe((res)=>{
