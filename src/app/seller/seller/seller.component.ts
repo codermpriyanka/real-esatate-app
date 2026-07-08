@@ -171,7 +171,7 @@ this.selectedId=data._id
       facilities:data.facilities,
       photo:data.photo
  })
- this.previewUrl=data.photos ?'http://localhost:3000/uploads/'+data.photos :'';
+ this.previewUrl=data.photos ?'https://real-estate-backend-zdip.onrender.com/uploads/'+data.photos :'';
  this.selectedFacilities=data.facilities || [];
  console.log(this.selectedFacilities ,"selected facili")
   }  

@@ -62,6 +62,7 @@ isDarkMode:boolean=false;
     this.buyerService.buyProperty( this.selectedPropertyId,payload).subscribe((res:any)=>{
       console.log(res)
       alert("Property Purchased Successfully")
+      this.getApprovedProperties()
     })
    this.showBuyModal = false;
     this.buyForm.reset();

@@ -9,10 +9,10 @@ export class AdminDashboardService {
   constructor(private http:HttpClient) { }
 
   getPropertyList(){
-    return this.http.get('http://localhost:3000/api/property/admin-properties')
+    return this.http.get('https://real-estate-backend-zdip.onrender.com/api/property/admin-properties')
   }
   adminApproveProperty(id:any){
-    return this.http.put('http://localhost:3000/api/property/approve-property'+'/'+id,{})
+    return this.http.put('https://real-estate-backend-zdip.onrender.com/api/property/approve-property'+'/'+id,{})
   }
 
 

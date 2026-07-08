@@ -38,8 +38,9 @@
     </li>
   </ul>
 </li>
-                <li *ngIf="role!='admin'" class="cursor-pointer py-4"><a routerLink="/contact" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Contact</a></li>
-                <li *ngIf="role ==='admin'" class="cursor-pointer py-4"><a routerLink="/check-message" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Check Message</a></li>
+                <li *ngIf="role!='Admin'" class="cursor-pointer py-4"><a routerLink="/contact" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Contact</a></li>
+                <li *ngIf="role ==='Admin'" class="cursor-pointer py-4"><a routerLink="/check-message" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Check Message</a></li>
+                  <li *ngIf="role ==='Admin'" class="cursor-pointer py-4"><a routerLink="/admin/admin-dashboard" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Admin Dashboard</a></li>
                 <li *ngIf="role ==='seller'" class="cursor-pointer py-4"><a routerLink="/seller/seller-dashboard" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Seller Dashboard</a></li>
                 <li *ngIf="role ==='buyer'" class="cursor-pointer py-4"><a routerLink="/buyer/buyer-dashboard" class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 hover:border-primary transition-all duration-300">Buyer Dashboard</a></li>
                 <li *ngIf="role ==='buyer'" class="cursor-pointer py-4"> <a routerLink="/buyer/buyer-purchase"  class="text-lg font-medium hover:text-[#6153CD] hover:border-b-2 transition-all duration-300">My Purchases</a></li>

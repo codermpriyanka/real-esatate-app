@@ -45,7 +45,7 @@ closeLoginForm(){
          this.router.navigate(['buyer/buyer-dashboard'])
         } else if(res.user.role == 'seller'){
          this.router.navigate(['seller/seller-dashboard'])
-        } else if(res.user.role == 'admin'){
+        } else if(res.user.role == 'Admin'){
 this.router.navigate(['admin/admin-dashboard'])
         }
         this.authService.loginScreen.next(false)

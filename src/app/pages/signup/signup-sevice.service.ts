@@ -9,7 +9,7 @@ export class SignupSeviceService {
   constructor(private http:HttpClient) { }
 
   signUpUser(user:any){
-    return this.http.post('http://localhost:3000/api/auth/signup',user,{observe:'response'})
+    return this.http.post('https://real-estate-backend-zdip.onrender.com/api/auth/signup',user,{observe:'response'})
   }
 
 }

@@ -9,7 +9,7 @@ export class LoginserviceService {
   constructor(private http:HttpClient) { }
  
   loginUser(val:any){
-    return this.http.post('http://localhost:3000/api/auth/login',val)
+    return this.http.post('https://real-estate-backend-zdip.onrender.com/api/auth/login',val)
   }
 
 

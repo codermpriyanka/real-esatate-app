@@ -8,6 +8,6 @@ export class CheckMessageServiceService {
 
   constructor(private http:HttpClient) { }
   getMessages(){
-    return this.http.get('http://localhost:3000/api/contact/get-message')
+    return this.http.get('https://real-estate-backend-zdip.onrender.com/api/contact/get-message')
   }
 }
